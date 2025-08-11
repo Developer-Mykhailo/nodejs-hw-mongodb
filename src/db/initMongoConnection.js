@@ -6,7 +6,7 @@ export const initMongoConnection = async () => {
     const dbUser = getEnvVar('MONGODB_USER');
     const dbPassword = getEnvVar('MONGODB_PASSWORD');
     const dbUrl = getEnvVar('MONGODB_URL');
-    const dbName = getEnvVar('MONGODB_DB_NAME');
+    const dbName = getEnvVar('MONGODB_DB');
 
     await mongoose.connect(
       `mongodb+srv://${dbUser}:${dbPassword}@${dbUrl}/${dbName}?retryWrites=true&w=majority&appName=Cluster1`,
