@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
 
-import ContactsColectioin from './db/models/Contacts.js';
+import ContactsCollection from './db/models/Contacts.js';
 
 export const setupServer = () => {
   const app = express();
@@ -18,7 +18,7 @@ export const setupServer = () => {
   );
 
   app.get('/contacts', async (req, res) => {
-    const data = await ContactsColectioin.find();
+    const data = await ContactsCollection.find();
 
     res.json({
       status: 200,
@@ -27,20 +27,20 @@ export const setupServer = () => {
     });
   });
 
-  app.get('/contacts/:id', async (req, res) => {
-    const { id } = req.params;
-    const data = await ContactsColectioin.findById(id);
+  app.get('/contacts/:contactId', async (req, res) => {
+    const { contactId } = req.params;
+    const data = await ContactsCollection.findById(contactId);
 
     if (!data) {
       return res.status(404).json({
         status: 404,
-        message: `Contact with id ${id} not found`,
+        message: `Contact with id ${contactId} not found`,
       });
     }
 
     res.json({
       status: 200,
-      message: `Successfully find contact with id=${id}`,
+      message: `Successfully find contact with id=${contactId}`,
       data,
     });
   });
