@@ -14,13 +14,23 @@
   "keywords": [],
   "author": "Mykhailo Pylypiv <developer.mykhailo@gmail.com>",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/Developer-Mykhailo/nodejs-hw-mongodb/issues"
   },
   "homepage": "https://github.com/Developer-Mykhailo/nodejs-hw-mongodb#readme",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mongoose": "^8.17.1",
+    "pino-http": "^10.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
     "eslint": "^9.33.0",
-    "nodemon": "^3.1.10"
+    "globals": "^16.3.0",
+    "nodemon": "^3.1.10",
+    "pino-pretty": "^13.1.1"
   }
 }
