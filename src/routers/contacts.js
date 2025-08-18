@@ -1,35 +1,13 @@
 import { Router } from 'express';
-
-import ContactsCollection from '../db/models/Contacts.js';
+import {
+  getContactsController,
+  getContactByIdController,
+} from '../controllers/contacts.js';
 
 const contactsRouter = Router();
 
-contactsRouter.get('/', async (req, res) => {
-  const data = await ContactsCollection.find();
+contactsRouter.get('/', getContactsController);
 
-  res.json({
-    status: 200,
-    message: 'Successfully find contacts',
-    data,
-  });
-});
-
-contactsRouter.get('/:contactId', async (req, res) => {
-  const { contactId } = req.params;
-  const data = await ContactsCollection.findById(contactId);
-
-  if (!data) {
-    return res.status(404).json({
-      status: 404,
-      message: `Contact with id ${contactId} not found`,
-    });
-  }
-
-  res.json({
-    status: 200,
-    message: `Successfully find contact with id=${contactId}`,
-    data,
-  });
-});
+contactsRouter.get('/:contactId', getContactByIdController);
 
 export default contactsRouter;
