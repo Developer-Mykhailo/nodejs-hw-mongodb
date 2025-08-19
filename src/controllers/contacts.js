@@ -1,6 +1,8 @@
 import ContactsCollection from '../db/models/Contacts.js';
+import { notFoudHandler } from '../middlewares/notFoundHandler.js';
 
 export const getContactsController = async (req, res) => {
+  // throw new Error('Database request error');
   const data = await ContactsCollection.find();
 
   res.json({
@@ -15,10 +17,7 @@ export const getContactByIdController = async (req, res) => {
   const data = await ContactsCollection.findById(contactId);
 
   if (!data) {
-    return res.status(404).json({
-      status: 404,
-      message: `Contact with id ${contactId} not found`,
-    });
+    return notFoudHandler(req, res);
   }
 
   res.json({

@@ -3,6 +3,8 @@ import cors from 'cors';
 import pino from 'pino-http';
 
 import contactsRouter from './routers/contacts.js';
+import { notFoudHandler } from './middlewares/notFoundHandler.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 export const setupServer = () => {
   const app = express();
@@ -19,12 +21,8 @@ export const setupServer = () => {
 
   app.use('/contacts', contactsRouter);
 
-  //404
-  app.use((req, res) => {
-    res.status(404).json({
-      message: 'not found',
-    });
-  });
+  app.use(notFoudHandler);
+  app.use(errorHandler);
 
   const PORT = Number(process.env.PORT) || 3000;
   app.listen(PORT, () => {
