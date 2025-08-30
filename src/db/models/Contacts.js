@@ -28,6 +28,8 @@ const contactsSchema = new Schema(
   { versionKey: false, timestamps: true },
 );
 
+export const contactFields = ['name', 'phoneNumber', 'email'];
+
 // contactsSchema.post('save', (error, doc, next) => {
 //   error.status = 400;
 //   console.log(error);

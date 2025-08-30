@@ -8,11 +8,14 @@ import {
   deleteContactById,
 } from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { contactFields } from '../db/models/Contacts.js';
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query, contactFields);
 
-  const data = await getContacts({ page, perPage });
+  const data = await getContacts({ page, perPage, sortBy, sortOrder });
 
   res.json({
     status: 200,
