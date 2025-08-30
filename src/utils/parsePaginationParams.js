@@ -9,7 +9,7 @@ export const parseNumber = (value, defaultValue) => {
 
 export const parsePaginationParams = ({ page, perPage }) => {
   const parsedPege = parseNumber(page, 1);
-  const parsedPerPage = parseNumber(perPage, 3);
+  const parsedPerPage = parseNumber(perPage, 10);
 
   return {
     page: parsedPege,
