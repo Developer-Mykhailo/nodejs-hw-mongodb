@@ -1,10 +1,21 @@
-import { setupSession } from '../utils/setupSession.js';
 import {
   loginUser,
   logoutUser,
   refreshUserSessoin,
   registerUser,
 } from '../services/auth.js';
+
+export const setupSession = (res, session) => {
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.cookie('sessionId', session.userId, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+};
 
 //---------------------------------------------------------------
 

@@ -3,6 +3,11 @@ import { typeList } from '../../constants/contact-constants.js';
 
 const contactsSchema = new Schema(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -29,13 +34,6 @@ const contactsSchema = new Schema(
 );
 
 export const contactFields = ['name', 'phoneNumber', 'email'];
-
-// contactsSchema.post('save', (error, doc, next) => {
-//   error.status = 400;
-//   console.log(error);
-
-//   next();
-// });
 
 const ContactsCollection = model('contact', contactsSchema);
 export default ContactsCollection;

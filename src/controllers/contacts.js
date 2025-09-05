@@ -1,10 +1,10 @@
 import { notFoudHandler } from '../middlewares/notFoundHandler.js';
 import {
   getContacts,
-  getContactById,
+  getContact,
   addContact,
-  patchContactById,
-  deleteContactById,
+  deleteContact,
+  patchContact,
 } from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
@@ -17,8 +17,15 @@ export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query, contactFields);
   const filters = parseContactFilter(req.query);
+  const { _id: userId } = req.user;
 
-  const data = await getContacts({ page, perPage, sortBy, sortOrder, filters });
+  const data = await getContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filters: { ...filters, userId },
+  });
 
   res.json({
     status: 200,
@@ -30,14 +37,16 @@ export const getContactsController = async (req, res) => {
 //---------------------------------------------------------------
 
 export const getContactByIdController = async (req, res) => {
-  const { contactId } = req.params;
-  const data = await getContactById(contactId);
+  const { contactId: _id } = req.params;
+  const { _id: userId } = req.user;
+
+  const data = await getContact({ _id, userId });
 
   if (!data) return notFoudHandler();
 
   res.json({
     status: 200,
-    message: `Successfully find contact with id=${contactId}`,
+    message: `Successfully find contact with id=${_id}`,
     data,
   });
 };
@@ -45,7 +54,9 @@ export const getContactByIdController = async (req, res) => {
 //---------------------------------------------------------------
 
 export const addContactController = async (req, res) => {
-  const data = await addContact(req.body);
+  const { _id: userId } = req.user;
+
+  const data = await addContact({ ...req.body, userId });
 
   res.status(201).json({
     status: 201,
@@ -57,9 +68,10 @@ export const addContactController = async (req, res) => {
 //---------------------------------------------------------------
 
 export const patchContactByIdController = async (req, res) => {
-  const { contactId } = req.params;
+  const { contactId: _id } = req.params;
+  const { _id: userId } = req.user;
 
-  const result = await patchContactById(contactId, req.body);
+  const result = await patchContact({ _id, userId }, req.body);
 
   if (!result || !result.value) return notFoudHandler();
 
@@ -73,9 +85,10 @@ export const patchContactByIdController = async (req, res) => {
 //---------------------------------------------------------------
 
 export const deleteContactByIdController = async (req, res) => {
-  const { contactId } = req.params;
+  const { contactId: _id } = req.params;
+  const { _id: userId } = req.user;
 
-  const data = await deleteContactById(contactId);
+  const data = await deleteContact({ _id, userId });
 
   if (!data) return notFoudHandler();
 
