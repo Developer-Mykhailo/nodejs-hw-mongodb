@@ -1,6 +1,8 @@
 import ContactsCollection from '../db/models/Contacts.js';
 import { calcPaginationData } from '../utils/calcPaginationData.js';
 
+//---------------------------------------------------------------
+
 export const getContacts = async ({
   page = 1,
   perPage = 10,
@@ -33,7 +35,11 @@ export const getContacts = async ({
   };
 };
 
+//---------------------------------------------------------------
+
 export const getContactById = async (id) => ContactsCollection.findById(id);
+
+//---------------------------------------------------------------
 
 export const addContact = async (payload) => ContactsCollection.create(payload);
 

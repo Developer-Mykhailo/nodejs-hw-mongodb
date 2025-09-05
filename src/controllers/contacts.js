@@ -1,4 +1,3 @@
-import createHttpError from 'http-errors';
 import { notFoudHandler } from '../middlewares/notFoundHandler.js';
 import {
   getContacts,
@@ -11,6 +10,8 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { contactFields } from '../db/models/Contacts.js';
 import { parseContactFilter } from '../utils/parseContactFilter.js';
+
+//---------------------------------------------------------------
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -26,13 +27,13 @@ export const getContactsController = async (req, res) => {
   });
 };
 
+//---------------------------------------------------------------
+
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
   const data = await getContactById(contactId);
 
-  if (!data) {
-    return notFoudHandler(req, res);
-  }
+  if (!data) return notFoudHandler();
 
   res.json({
     status: 200,
@@ -40,6 +41,8 @@ export const getContactByIdController = async (req, res) => {
     data,
   });
 };
+
+//---------------------------------------------------------------
 
 export const addContactController = async (req, res) => {
   const data = await addContact(req.body);
@@ -53,15 +56,12 @@ export const addContactController = async (req, res) => {
 
 //---------------------------------------------------------------
 
-export const patchContactByIdController = async (req, res, next) => {
+export const patchContactByIdController = async (req, res) => {
   const { contactId } = req.params;
 
   const result = await patchContactById(contactId, req.body);
 
-  if (!result || !result.value) {
-    next(createHttpError(404, 'Contact not found'));
-    return;
-  }
+  if (!result || !result.value) return notFoudHandler();
 
   res.json({
     status: 200,
@@ -72,15 +72,12 @@ export const patchContactByIdController = async (req, res, next) => {
 
 //---------------------------------------------------------------
 
-export const deleteContactByIdController = async (req, res, next) => {
+export const deleteContactByIdController = async (req, res) => {
   const { contactId } = req.params;
 
   const data = await deleteContactById(contactId);
 
-  if (!data) {
-    next(createHttpError(404, 'Contact not found'));
-    return;
-  }
+  if (!data) return notFoudHandler();
 
   res.status(204).send();
 };
