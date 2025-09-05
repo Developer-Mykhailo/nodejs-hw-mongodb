@@ -6,6 +6,18 @@ import UsersCollection from '../db/models/User.js';
 import SessionCollection from '../db/models/Session.js';
 import { FIFTEEN_MINUTES, ONE_MONTH } from '../constants/auth-constants.js';
 
+const createSession = () => {
+  const accessToken = randomBytes(30).toString('base64');
+  const refreshToken = randomBytes(30).toString('base64');
+
+  return {
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    refreshTokenValidUntil: new Date(Date.now() + ONE_MONTH),
+  };
+};
+
 //---------------------------------------------------------------
 
 export const registerUser = async (payload) => {
@@ -31,15 +43,9 @@ export const loginUser = async ({ email, password }) => {
 
   await SessionCollection.deleteOne({ userId: user._id });
 
-  const accessToken = randomBytes(30).toString('base64');
-  const refreshToken = randomBytes(30).toString('base64');
-
   return SessionCollection.create({
     userId: user._id,
-    accessToken,
-    refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
-    refreshTokenValidUntil: new Date(Date.now() + ONE_MONTH),
+    ...createSession(),
   });
 };
 
@@ -50,18 +56,6 @@ export const logoutUser = async (userId) => {
 };
 
 //---------------------------------------------------------------
-
-const createSession = () => {
-  const accessToken = randomBytes(30).toString('base64');
-  const refreshToken = randomBytes(30).toString('base64');
-
-  return {
-    accessToken,
-    refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
-    refreshTokenValidUntil: new Date(Date.now() + ONE_MONTH),
-  };
-};
 
 export const refreshUserSessoin = async ({ sessionId, refreshToken }) => {
   const session = await SessionCollection.findOne({
