@@ -7,6 +7,7 @@ import SessionCollection from '../db/models/Session.js';
 import { FIFTEEN_MINUTES, ONE_MONTH } from '../constants/auth-constants.js';
 
 //---------------------------------------------------------------
+
 export const registerUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
   if (user) throw createHttpError(409, 'Email in use');
@@ -79,12 +80,10 @@ export const refreshUserSessoin = async ({ sessionId, refreshToken }) => {
     throw createHttpError(401, 'Session token expired');
   }
 
-  const newSession = createSession();
-
   await SessionCollection.deleteOne({ userId: sessionId, refreshToken });
 
   return await SessionCollection.create({
     userId: session.userId,
-    ...newSession,
+    ...createSession(),
   });
 };

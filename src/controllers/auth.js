@@ -1,10 +1,12 @@
+import { setupSession } from '../utils/setupSession.js';
 import {
   loginUser,
   logoutUser,
   refreshUserSessoin,
   registerUser,
 } from '../services/auth.js';
-import { setupSession } from '../utils/setupSession.js';
+
+//---------------------------------------------------------------
 
 export const registerController = async (req, res) => {
   await registerUser(req.body);
@@ -37,10 +39,7 @@ export const logoutUserController = async (req, res) => {
     await logoutUser(req.cookies.sessionId);
   }
 
-  res.clearCookie('sessionId');
-  res.clearCookie('refreshToken');
-
-  res.status(204).send();
+  res.clearCookie('sessionId').clearCookie('refreshToken').status(204).send();
 };
 
 //---------------------------------------------------------------
