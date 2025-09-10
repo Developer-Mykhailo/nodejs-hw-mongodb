@@ -1,10 +1,18 @@
 import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'node:crypto';
+import jwt from 'jsonwebtoken';
 
 import UsersCollection from '../db/models/User.js';
 import SessionCollection from '../db/models/Session.js';
 import { FIFTEEN_MINUTES, ONE_MONTH } from '../constants/auth-constants.js';
+import ContactsCollection from '../db/models/Contacts.js';
+
+import { SMTP } from '../constants/index.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
+import { sendEmail } from '../utils/sendMail.js';
+
+//---------------------------------------------------------------
 
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
@@ -80,4 +88,37 @@ export const refreshUserSessoin = async ({ sessionId, refreshToken }) => {
     userId: session.userId,
     ...createSession(),
   });
+};
+
+//---------------------------------------------------------------
+
+export const sendResetEmail = async (email) => {
+  const user = await UsersCollection.findOne({ email });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const resetToken = jwt.sign({ email }, getEnvVar('JWT_SECRET'), {
+    expiresIn: '5m',
+  });
+
+  const resetLink = `${getEnvVar(
+    'APP_DOMAIN',
+  )}/reset-password?token=${resetToken}`;
+
+  try {
+    await sendEmail({
+      from: getEnvVar(SMTP.SMTP_FROM),
+      to: email,
+      subject: 'Reset your password',
+      html: `<p>Click <a href="${resetLink}">here</a> to reset your password</p>`,
+    });
+  } catch (error) {
+    console.error('Detailed SMTP Error:', error);
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later',
+    );
+  }
 };
