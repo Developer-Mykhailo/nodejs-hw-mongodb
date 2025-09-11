@@ -2,13 +2,15 @@ import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'node:crypto';
 import jwt from 'jsonwebtoken';
+import Handlebars from 'handlebars';
+import path from 'node:path';
+import fs from 'node:fs/promises';
 
 import UsersCollection from '../db/models/User.js';
 import SessionCollection from '../db/models/Session.js';
 import { FIFTEEN_MINUTES, ONE_MONTH } from '../constants/auth-constants.js';
-import ContactsCollection from '../db/models/Contacts.js';
 
-import { SMTP } from '../constants/index.js';
+import { SMTP, TEMPLATES_DIR } from '../constants/index.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
 import { sendEmail } from '../utils/sendMail.js';
 
@@ -107,12 +109,31 @@ export const sendResetEmail = async (email) => {
     'APP_DOMAIN',
   )}/reset-password?token=${resetToken}`;
 
+  // form path to the file
+  const resetPasswordTemplatePath = path.join(
+    TEMPLATES_DIR,
+    'reset-password-email.html',
+  );
+
+  //read the html file as a string
+  const templateSource = (
+    await fs.readFile(resetPasswordTemplatePath)
+  ).toString();
+
+  //compile and render the final html
+  const template = Handlebars.compile(templateSource);
+  const html = template({
+    name: user.name,
+    link: resetLink,
+  });
+
   try {
     await sendEmail({
       from: getEnvVar(SMTP.SMTP_FROM),
       to: email,
       subject: 'Reset your password',
-      html: `<p>Click <a href="${resetLink}">here</a> to reset your password</p>`,
+      // html: `<p>Click <a href="${resetLink}">here</a> to reset your password</p>`,
+      html,
     });
   } catch (error) {
     console.error('Detailed SMTP Error:', error);
