@@ -10,6 +10,7 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { contactFields } from '../db/models/Contacts.js';
 import { parseContactFilter } from '../utils/parseContactFilter.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 //---------------------------------------------------------------
 
@@ -70,8 +71,23 @@ export const addContactController = async (req, res) => {
 export const patchContactByIdController = async (req, res) => {
   const { contactId: _id } = req.params;
   const { _id: userId } = req.user;
+  const photo = req.file;
+  console.log(req.file.path);
 
-  const result = await patchContact({ _id, userId }, req.body);
+  let photoUrl;
+
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+
+  const result = await patchContact(
+    { _id, userId },
+    {
+      ...req.body,
+      photo: photoUrl,
+    },
+  );
+  console.log(result);
 
   if (!result || !result.value) return notFoudHandler();
 
