@@ -13,7 +13,7 @@ cloudinary.v2.config({
 
 export const saveFileToCloudinary = async (file) => {
   const response = await cloudinary.v2.uploader.upload(file.path, {
-    folder: 'temp_images',
+    folder: 'images',
     use_filename: true,
   });
   await fs.unlink(file.path);
