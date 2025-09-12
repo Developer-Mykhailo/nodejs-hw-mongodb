@@ -29,6 +29,7 @@ contactsRouter.get('/', ctrlWrapper(getContactsController));
 contactsRouter.get(
   '/:contactId',
   isValidId,
+  upload.single('photo'),
   ctrlWrapper(getContactByIdController),
 );
 
