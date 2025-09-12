@@ -74,7 +74,6 @@ export const patchContactByIdController = async (req, res) => {
   const { contactId: _id } = req.params;
   const { _id: userId } = req.user;
   const photo = req.file;
-  console.log(req.file);
 
   let photoUrl;
 
