@@ -29,6 +29,7 @@ export const contactAddSchema = Joi.object({
     .valid(...typeList)
     .min(3)
     .max(20),
+  photo: Joi.string(),
 });
 
 export const contactUpdateSchema = Joi.object({
@@ -40,4 +41,5 @@ export const contactUpdateSchema = Joi.object({
     .valid(...typeList)
     .min(3)
     .max(20),
+  photo: Joi.string(),
 });
