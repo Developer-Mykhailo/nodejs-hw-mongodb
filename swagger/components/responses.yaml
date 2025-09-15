@@ -1,0 +1,91 @@
+ValidationFailed: #400
+  description: Validation failed
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+          message:
+            type: string
+            description: General error name
+          data:
+            type: object
+            properties:
+              message:
+                type: array
+                items:
+                  type: string
+                description: The list of validation error messages
+
+      example:
+        status: 400
+        message: BadRequestError
+        data:
+          message:
+            - 'Phone number must be in format: +xxxxxxxxxxxx'
+            - 'Title must be exist'
+            - 'Title must be string'
+            - 'Email is required'
+            - 'Email must be at least 6 characters long'
+            - 'Email must not exceed 30 characters'
+            - 'Email must be in format: user@example.com'
+
+Unauthorized: #401
+  description: Unauthorized
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+          message:
+            type: string
+            description: Error definition
+          data:
+            type: object
+            properties:
+              message:
+                type: array
+                items:
+                  type: string
+                  description: The list of messages that may describe the error
+
+      example:
+        status: 401
+        message: UnauthorizedError
+        data:
+          message:
+            - 'Session not found'
+            - 'Access token expired'
+
+NotFound: #404
+  description: Not Found
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 404
+          message:
+            type: string
+          data:
+            type: object
+            properties:
+              message:
+                type: array
+                items:
+                  type: string
+                description: The list of messages that may describe the error
+
+      example:
+        status: 404
+        message: NotFoundError
+        data:
+          message:
+            - 'Route not found'
+            - '68c3b1a98ca1bf0eeca980dq is not valid id'

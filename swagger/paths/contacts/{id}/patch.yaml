@@ -1,0 +1,29 @@
+tags:
+  - Contacts
+summary: Update contact partially
+operationId: updateContact
+description: Updates only provided fields of the contact.
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      format: uuid
+    description: Contact ID
+# requestBody:
+#   content:
+#     application/json:
+#       schema:
+#         $ref: ../../components/Contact.yaml
+# responses:
+#   '200':
+#     description: Updated contact
+#     content:
+#       application/json:
+#         schema:
+#           $ref: ../../components/Contact.yaml
+#   '404':
+#     $ref: ../../components/responses.yaml#/NotFound
