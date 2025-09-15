@@ -11,19 +11,43 @@ parameters:
     required: true
     schema:
       type: string
-      format: uuid
     description: Contact ID
-# requestBody:
-#   content:
-#     application/json:
-#       schema:
-#         $ref: ../../components/Contact.yaml
-# responses:
-#   '200':
-#     description: Updated contact
-#     content:
-#       application/json:
-#         schema:
-#           $ref: ../../components/Contact.yaml
-#   '404':
-#     $ref: ../../components/responses.yaml#/NotFound
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        allOf:
+          - $ref: ../../../components/Contact.yaml
+            type: object
+            properties:
+              userId:
+                readOnly: true
+              id:
+                readOnly: true
+              createdAt:
+                readOnly: true
+              updatedAt:
+                readOnly: true
+
+responses:
+  '200':
+    description: Updated contact
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../../components/Contact.yaml
+              type: object
+              properties:
+                userId:
+                  readOnly: true
+                id:
+                  readOnly: true
+                createdAt:
+                  readOnly: true
+                updatedAt:
+                  readOnly: true
+
+  '404':
+    $ref: ../../../components/responses.yaml#/NotFound
