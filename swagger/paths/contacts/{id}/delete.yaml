@@ -15,7 +15,7 @@ parameters:
 
 responses:
   '204':
-    description: No Content
+    description: Contact deleted successfully, no content returned
 
   '401':
     $ref: ../../../components/responses.yaml#/Unauthorized
