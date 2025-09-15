@@ -1,0 +1,61 @@
+tags:
+  - Contacts
+summary: Create a new contact
+operationId: createContact
+description: Creates a new contact. All fields are validated.
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+          - phoneNumber
+          - email
+        properties:
+          name:
+            type: string
+            example: 'User'
+          phoneNumber:
+            type: string
+            example: '+380000000007'
+          email:
+            type: string
+            format: email
+            description: Email address of the contact
+            example: user@example.com
+          isFavourite:
+            type: boolean
+            example: true
+            description: Optional
+          contactType:
+            type: boolean
+            example: false
+            description: Optional
+          photo:
+            type: string
+            format: uri
+            description: URL to the contact's photo (Optional)
+            example: 'https://contacts-api-production-2e8a4b1c.onrender.com/uploads/1757892460123_AlexAvatar.jpg'
+
+responses:
+  '201':
+    description: Successfully created a contact!
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Successfully created a contact!'
+            data:
+              $ref: ../../components/Contact.yaml
+  '400':
+    $ref: ../../components/responses.yaml#/ValidationFailed
