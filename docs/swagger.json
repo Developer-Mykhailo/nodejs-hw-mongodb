@@ -23,10 +23,6 @@
     {
       "name": "Contacts",
       "description": "Endpoints for managing user contacts."
-    },
-    {
-      "name": "Auth",
-      "description": "Registration, login, logout"
     }
   ],
   "paths": {
@@ -69,8 +65,7 @@
             "in": "query",
             "name": "isFavourite",
             "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "boolean"
             },
             "description": "Filter by favorite status"
           },
@@ -83,10 +78,35 @@
                 "personal",
                 "work",
                 "home"
-              ],
-              "default": "personal"
+              ]
             },
             "description": "Filter by contactType"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "name",
+                "phoneNumber",
+                "email"
+              ]
+            },
+            "description": "Sort by name"
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "asc"
+            },
+            "description": "Order of sorting (ascending or descending)"
           }
         ],
         "responses": {
@@ -149,9 +169,6 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
           }
         }
       },
@@ -170,7 +187,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": [
@@ -185,7 +202,7 @@
                   },
                   "phoneNumber": {
                     "type": "string",
-                    "example": "+380000000007"
+                    "example": "+380123456789"
                   },
                   "email": {
                     "type": "string",
@@ -199,15 +216,19 @@
                     "description": "Optional"
                   },
                   "contactType": {
-                    "type": "boolean",
+                    "type": "string",
+                    "enum": [
+                      "personal",
+                      "work",
+                      "home"
+                    ],
                     "example": "personal",
                     "description": "Optional"
                   },
                   "photo": {
                     "type": "string",
-                    "format": "uri",
-                    "description": "URL to the contact's photo (Optional)",
-                    "example": "https://contacts-api-production-2e8a4b1c.onrender.com/uploads/1757892460123_AlexAvatar.jpg"
+                    "format": "binary",
+                    "description": "Photo file to upload (Optional)"
                   }
                 }
               }
@@ -240,6 +261,9 @@
           },
           "400": {
             "$ref": "#/components/responses/ValidationFailed"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       }
@@ -325,7 +349,7 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": [
@@ -350,11 +374,15 @@
                   },
                   "isFavourite": {
                     "type": "boolean",
-                    "example": true,
                     "description": "Optional"
                   },
                   "contactType": {
                     "type": "string",
+                    "enum": [
+                      "personal",
+                      "work",
+                      "home"
+                    ],
                     "example": "personal",
                     "description": "Optional"
                   },
@@ -417,6 +445,9 @@
               }
             }
           },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
@@ -469,6 +500,14 @@
     "schemas": {
       "Contact": {
         "type": "object",
+        "required": [
+          "_id",
+          "userId",
+          "name",
+          "phoneNumber",
+          "email",
+          "contactType"
+        ],
         "properties": {
           "_id": {
             "type": "string",
@@ -497,12 +536,6 @@
             "description": "Email address of the contact",
             "example": "user@example.com"
           },
-          "isFavourite": {
-            "type": "boolean",
-            "description": "Whether the contact is marked as favourite",
-            "default": false,
-            "example": true
-          },
           "contactType": {
             "type": "string",
             "description": "Type of contact",
@@ -513,6 +546,12 @@
             ],
             "default": "personal",
             "example": "work"
+          },
+          "isFavourite": {
+            "type": "boolean",
+            "description": "Whether the contact is marked as favourite",
+            "default": false,
+            "example": true
           },
           "createdAt": {
             "type": "string",
@@ -577,47 +616,6 @@
           }
         }
       },
-      "NotFound": {
-        "description": "Not Found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "integer",
-                  "example": 404
-                },
-                "message": {
-                  "type": "string"
-                },
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "description": "The list of messages that may describe the error"
-                    }
-                  }
-                }
-              }
-            },
-            "example": {
-              "status": 404,
-              "message": "NotFoundError",
-              "data": {
-                "message": [
-                  "Route not found",
-                  "68c3b1a98ca1bf0eeca980dq is not valid id"
-                ]
-              }
-            }
-          }
-        }
-      },
       "ValidationFailed": {
         "description": "Validation failed",
         "content": {
@@ -658,6 +656,47 @@
                   "Email must be at least 6 characters long",
                   "Email must not exceed 30 characters",
                   "Email must be in format: user@example.com"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "The list of messages that may describe the error"
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "status": 404,
+              "message": "NotFoundError",
+              "data": {
+                "message": [
+                  "Route not found",
+                  "68c3b1a98ca1bf0eeca980dq is not valid id"
                 ]
               }
             }

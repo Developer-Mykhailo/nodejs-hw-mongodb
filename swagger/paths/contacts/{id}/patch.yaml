@@ -15,7 +15,7 @@ parameters:
 
 requestBody:
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         required:
@@ -36,10 +36,10 @@ requestBody:
             example: newEmail@example.com
           isFavourite:
             type: boolean
-            example: true
             description: Optional
           contactType:
             type: string
+            enum: [personal, work, home]
             example: personal
             description: Optional
           photo:
@@ -87,3 +87,6 @@ responses:
 
   '404':
     $ref: ../../../components/responses.yaml#/NotFound
+
+  '401':
+    $ref: ../../../components/responses.yaml#/Unauthorized

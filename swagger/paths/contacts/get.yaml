@@ -28,19 +28,29 @@ parameters:
     name: isFavourite
     schema:
       type: boolean
-      default: false
     description: Filter by favorite status
 
   - in: query
     name: contactType
     schema:
       type: string
-      enum:
-        - personal
-        - work
-        - home
-      default: personal
+      enum: [personal, work, home]
     description: Filter by contactType
+
+  - in: query
+    name: sortBy
+    schema:
+      type: string
+      enum: [name, phoneNumber, email]
+    description: Sort by name
+
+  - in: query
+    name: sortOrder
+    schema:
+      type: string
+      enum: [asc, desc]
+      default: asc
+    description: Order of sorting (ascending or descending)
 
 responses:
   '200':
@@ -86,5 +96,5 @@ responses:
   '401':
     $ref: ../../components/responses.yaml#/Unauthorized
 
-  '404':
-    $ref: ../../components/responses.yaml#/NotFound
+  # '404':
+  #   $ref: ../../components/responses.yaml#/NotFound
