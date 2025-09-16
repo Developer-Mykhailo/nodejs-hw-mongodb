@@ -22,11 +22,12 @@ export const setupSession = (res, session) => {
 //---------------------------------------------------------------
 
 export const registerController = async (req, res) => {
-  await registerUser(req.body);
+  const infoAboutUser = await registerUser(req.body);
 
   res.status(201).json({
     status: 201,
     message: 'Successfully registered user',
+    infoAboutUser,
   });
 };
 
