@@ -8,7 +8,7 @@ security:
 requestBody:
   required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         required:
@@ -21,7 +21,7 @@ requestBody:
             example: 'User'
           phoneNumber:
             type: string
-            example: '+380000000007'
+            example: '+380123456789'
           email:
             type: string
             format: email
@@ -32,14 +32,14 @@ requestBody:
             example: true
             description: Optional
           contactType:
-            type: boolean
+            type: string
+            enum: [personal, work, home]
             example: personal
             description: Optional
           photo:
             type: string
-            format: uri
-            description: URL to the contact's photo (Optional)
-            example: 'https://contacts-api-production-2e8a4b1c.onrender.com/uploads/1757892460123_AlexAvatar.jpg'
+            format: binary
+            description: Photo file to upload (Optional)
 
 responses:
   '201':
@@ -59,3 +59,6 @@ responses:
               $ref: ../../components/Contact.yaml
   '400':
     $ref: ../../components/responses.yaml#/ValidationFailed
+
+  '401':
+    $ref: ../../components/responses.yaml#/Unauthorized

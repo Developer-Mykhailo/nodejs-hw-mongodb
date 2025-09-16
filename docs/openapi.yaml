@@ -13,8 +13,8 @@ tags:
   - name: Contacts
     description: Endpoints for managing user contacts.
 
-  - name: Auth
-    description: Registration, login, logout
+  # - name: Auth
+  #   description: Registration, login, logout
 
 servers:
   - url: http://localhost:3000
