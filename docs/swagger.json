@@ -200,7 +200,7 @@
                   },
                   "contactType": {
                     "type": "boolean",
-                    "example": false,
+                    "example": "personal",
                     "description": "Optional"
                   },
                   "photo": {
@@ -411,7 +411,7 @@
         ],
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "Contact deleted successfully, no content returned"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
