@@ -71,7 +71,7 @@
           },
           {
             "in": "query",
-            "name": "contactType",
+            "name": "type",
             "schema": {
               "type": "string",
               "enum": [
@@ -193,7 +193,7 @@
                 "required": [
                   "name",
                   "phoneNumber",
-                  "email"
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
@@ -352,11 +352,6 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "phoneNumber",
-                  "email"
-                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -388,9 +383,8 @@
                   },
                   "photo": {
                     "type": "string",
-                    "format": "uri",
-                    "description": "URL to the contact's photo (Optional)",
-                    "example": "https://new-picture-address.jpg"
+                    "format": "binary",
+                    "description": "Photo file to upload (Optional)"
                   }
                 }
               }
@@ -404,11 +398,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "name",
-                    "phoneNumber",
-                    "email"
-                  ],
                   "properties": {
                     "name": {
                       "type": "string",
@@ -436,7 +425,7 @@
                     },
                     "photo": {
                       "type": "string",
-                      "format": "uri",
+                      "format": "binary",
                       "description": "URL to the contact's photo (Optional)",
                       "example": "https://new-picture-address.jpg"
                     }
@@ -505,7 +494,6 @@
           "userId",
           "name",
           "phoneNumber",
-          "email",
           "contactType"
         ],
         "properties": {

@@ -18,10 +18,10 @@ requestBody:
     multipart/form-data:
       schema:
         type: object
-        required:
-          - name
-          - phoneNumber
-          - email
+        # required:
+        #   - name
+        #   - phoneNumber
+        #   - email
         properties:
           name:
             type: string
@@ -44,9 +44,8 @@ requestBody:
             description: Optional
           photo:
             type: string
-            format: uri
-            description: URL to the contact's photo (Optional)
-            example: 'https://new-picture-address.jpg'
+            format: binary
+            description: Photo file to upload (Optional)
 
 responses:
   '200':
@@ -55,10 +54,6 @@ responses:
       application/json:
         schema:
           type: object
-          required:
-            - name
-            - phoneNumber
-            - email
           properties:
             name:
               type: string
@@ -81,7 +76,7 @@ responses:
               description: Optional
             photo:
               type: string
-              format: uri
+              format: binary
               description: URL to the contact's photo (Optional)
               example: 'https://new-picture-address.jpg'
 
