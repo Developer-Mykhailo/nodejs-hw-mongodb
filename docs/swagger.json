@@ -327,26 +327,44 @@
           "content": {
             "application/json": {
               "schema": {
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/Contact",
-                    "type": "object",
-                    "properties": {
-                      "userId": {
-                        "readOnly": true
-                      },
-                      "id": {
-                        "readOnly": true
-                      },
-                      "createdAt": {
-                        "readOnly": true
-                      },
-                      "updatedAt": {
-                        "readOnly": true
-                      }
-                    }
+                "type": "object",
+                "required": [
+                  "name",
+                  "phoneNumber",
+                  "email"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "New Name"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "example": "+380000000000"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email address of the contact",
+                    "example": "newEmail@example.com"
+                  },
+                  "isFavourite": {
+                    "type": "boolean",
+                    "example": true,
+                    "description": "Optional"
+                  },
+                  "contactType": {
+                    "type": "string",
+                    "example": "personal",
+                    "description": "Optional"
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL to the contact's photo (Optional)",
+                    "example": "https://new-picture-address.jpg"
                   }
-                ]
+                }
               }
             }
           }
@@ -357,26 +375,44 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/Contact",
-                      "type": "object",
-                      "properties": {
-                        "userId": {
-                          "readOnly": true
-                        },
-                        "id": {
-                          "readOnly": true
-                        },
-                        "createdAt": {
-                          "readOnly": true
-                        },
-                        "updatedAt": {
-                          "readOnly": true
-                        }
-                      }
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "phoneNumber",
+                    "email"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "New Name"
+                    },
+                    "phoneNumber": {
+                      "type": "string",
+                      "example": "+380000000000"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "Email address of the contact",
+                      "example": "newEmail@example.com"
+                    },
+                    "isFavourite": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "Optional"
+                    },
+                    "contactType": {
+                      "type": "string",
+                      "example": "personal",
+                      "description": "Optional"
+                    },
+                    "photo": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "URL to the contact's photo (Optional)",
+                      "example": "https://new-picture-address.jpg"
                     }
-                  ]
+                  }
                 }
               }
             }
