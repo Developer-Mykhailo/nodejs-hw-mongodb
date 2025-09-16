@@ -31,7 +31,7 @@ parameters:
     description: Filter by favorite status
 
   - in: query
-    name: contactType
+    name: type
     schema:
       type: string
       enum: [personal, work, home]
