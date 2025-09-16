@@ -33,7 +33,7 @@ requestBody:
             description: Optional
           contactType:
             type: boolean
-            example: 'work'
+            example: personal
             description: Optional
           photo:
             type: string
